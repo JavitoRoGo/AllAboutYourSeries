@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct AllAboutYourSeriesApp: App {
+	@State private var vm = SeriesVM()
+	
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainAppView()
+				.environment(vm)
         }
     }
 }

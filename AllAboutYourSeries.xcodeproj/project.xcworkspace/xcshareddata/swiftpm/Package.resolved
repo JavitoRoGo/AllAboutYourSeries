@@ -1,0 +1,15 @@
+{
+  "originHash" : "2c1434dc269bd361b8100f2c42cca7440f5d24505e83bcbbe35637a2d0a48cde",
+  "pins" : [
+    {
+      "identity" : "jsonlibrary",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JavitoRoGo/JSONLibrary.git",
+      "state" : {
+        "revision" : "ac2289d95fce545b57f8f3696ae249ea2d6427a0",
+        "version" : "1.0.2"
+      }
+    }
+  ],
+  "version" : 3
+}
