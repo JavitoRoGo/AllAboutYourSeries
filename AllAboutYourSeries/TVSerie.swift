@@ -6,11 +6,27 @@
 //
 
 import Foundation
+import SwiftData
 
-struct TVSerie: Codable, Identifiable {
-	let id: Int
+@Model
+final class TVSerie {
+	@Attribute(.unique) let id: Int
 	var details: TVDetail
 	var cast: [CastCrew]
 	var crew: [CastCrew]
 	var seasons: [TVSeason]
+	
+	init(id: Int, details: TVDetail, cast: [CastCrew], crew: [CastCrew], seasons: [TVSeason]) {
+		self.id = id
+		self.details = details
+		self.cast = cast
+		self.crew = crew
+		self.seasons = seasons
+	}
+}
+
+extension TVSerie {
+	var toDTO: TVSerieDTO {
+		TVSerieDTO(id: id, details: details.toDTO, cast: cast.map(\.toDTO), crew: crew.map(\.toDTO), seasons: seasons.map(\.toDTO))
+	}
 }

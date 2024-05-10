@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CastImage: View {
 	@State private var posterVM = PosterVM()
-	let cast: CastCrew
+	let cast: CastCrewDTO
 	
 	var body: some View {
 		Group {
@@ -36,5 +36,5 @@ struct CastImage: View {
 }
 
 #Preview {
-	CastImage(cast: TVSerie.preview.cast[0])
+	CastImage(cast: TVSerieDTO.preview.cast[0])
 }

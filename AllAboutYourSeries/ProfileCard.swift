@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileCard: View {
-	let cast: CastCrew
+	let cast: CastCrewDTO
 	
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
@@ -45,5 +45,5 @@ struct ProfileCard: View {
 }
 
 #Preview {
-    ProfileCard(cast: TVSerie.preview.cast[0])
+    ProfileCard(cast: TVSerieDTO.preview.cast[0])
 }

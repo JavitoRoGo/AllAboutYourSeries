@@ -10,13 +10,13 @@ import Foundation
 // MARK: - TVCreditsDTO
 struct TVCreditsDTO: Codable {
 	let id: Int
-	let cast, crew: [CastCrew]
+	let cast, crew: [CastCrewDTO]
 }
 
 // MARK: - Cast
-struct CastCrew: Codable, Identifiable {
+struct CastCrewDTO: Codable, Identifiable {
 	let id = UUID()
-	let dbid: Int
+	let dbid: Int?
 	let name: String
 	let profilePath: String?
 	let character: String?
@@ -29,5 +29,11 @@ struct CastCrew: Codable, Identifiable {
 		case profilePath = "profile_path"
 		case character
 		case order, department, job
+	}
+}
+
+extension CastCrewDTO {
+	var toCastCrew: CastCrew {
+		CastCrew(id: id, name: name, profilePath: profilePath, character: character, order: order, department: department, job: job)
 	}
 }

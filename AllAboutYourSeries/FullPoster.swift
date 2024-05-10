@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FullPoster: View {
 	@State private var posterVM = PosterVM()
-	let serie: TVSerie
+	let serie: TVSerieDTO
 	var type: ImageType = .poster
 	
     var body: some View {

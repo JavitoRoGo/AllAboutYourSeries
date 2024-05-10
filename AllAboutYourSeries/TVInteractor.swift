@@ -9,11 +9,11 @@ import Foundation
 import JSONLibrary
 
 protocol TVDataDownloader {
-	func getDetails(id: Int) async throws -> TVDetail
-	func getCredits(id: Int) async throws -> (cast: [CastCrew], crew: [CastCrew])
-	func getSeason(id: Int, number: Int) async throws -> TVSeason
-	func getSeasons(id: Int, numberOfSeasons: Int) async throws -> [TVSeason]
-	func getTVSerie(id: Int) async throws -> TVSerie
+	func getDetails(id: Int) async throws -> TVDetailDTO
+	func getCredits(id: Int) async throws -> (cast: [CastCrewDTO], crew: [CastCrewDTO])
+	func getSeason(id: Int, number: Int) async throws -> TVSeasonDTO
+	func getSeasons(id: Int, numberOfSeasons: Int) async throws -> [TVSeasonDTO]
+	func getTVSerie(id: Int) async throws -> TVSerieDTO
 	func searchForSeries(text: String) async throws -> [TVSerieSearches]
 }
 
@@ -25,21 +25,21 @@ struct TVDownloader: TVDataDownloader, NetworkInteractor {
 	
 	let session: URLSession = .shared
 	
-	func getDetails(id: Int) async throws -> TVDetail {
-		try await getJSON(request: .get(url: .serieDetails(id: id), token: appConfig.APIKEY), type: TVDetail.self)
+	func getDetails(id: Int) async throws -> TVDetailDTO {
+		try await getJSON(request: .get(url: .serieDetails(id: id), token: appConfig.APIKEY), type: TVDetailDTO.self)
 	}
 	
-	func getCredits(id: Int) async throws -> (cast: [CastCrew], crew: [CastCrew]) {
+	func getCredits(id: Int) async throws -> (cast: [CastCrewDTO], crew: [CastCrewDTO]) {
 		let castCrew = try await getJSON(request: .get(url: .serieCredits(id: id), token: appConfig.APIKEY), type: TVCreditsDTO.self)
 		return (castCrew.cast, castCrew.crew)
 	}
 	
-	func getSeason(id: Int, number: Int) async throws -> TVSeason {
-		try await getJSON(request: .get(url: .serieSeason(id: id, number: number), token: appConfig.APIKEY), type: TVSeason.self)
+	func getSeason(id: Int, number: Int) async throws -> TVSeasonDTO {
+		try await getJSON(request: .get(url: .serieSeason(id: id, number: number), token: appConfig.APIKEY), type: TVSeasonDTO.self)
 	}
 	
-	func getSeasons(id: Int, numberOfSeasons: Int) async throws -> [TVSeason] {
-		var result: [TVSeason] = []
+	func getSeasons(id: Int, numberOfSeasons: Int) async throws -> [TVSeasonDTO] {
+		var result: [TVSeasonDTO] = []
 		result.reserveCapacity(numberOfSeasons)
 		
 		do {
@@ -47,7 +47,7 @@ struct TVDownloader: TVDataDownloader, NetworkInteractor {
 			result.append(season0)
 		} catch { }
 		
-		try await withThrowingTaskGroup(of: TVSeason.self) { group in
+		try await withThrowingTaskGroup(of: TVSeasonDTO.self) { group in
 			for season in 1...numberOfSeasons {
 				group.addTask(priority: .high) {
 					try await getSeason(id: id, number: season)
@@ -61,12 +61,12 @@ struct TVDownloader: TVDataDownloader, NetworkInteractor {
 		return result
 	}
 	
-	func getTVSerie(id: Int) async throws -> TVSerie {
+	func getTVSerie(id: Int) async throws -> TVSerieDTO {
 		let details = try await getDetails(id: id)
 		async let creditsRequest = getCredits(id: id)
 		async let seasonsRequest = getSeasons(id: id, numberOfSeasons: details.numberOfSeasons)
 		let (castcrew, seasons) = try await (creditsRequest, seasonsRequest)
-		return TVSerie(
+		return TVSerieDTO(
 			id: id,
 			details: details,
 			cast: castcrew.cast,

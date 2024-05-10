@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LogoImage: View {
 	@State private var posterVM = PosterVM()
-	let network: Network
+	let network: NetworkDTO
 	
 	var body: some View {
 		Group {
@@ -36,5 +36,5 @@ struct LogoImage: View {
 }
 
 #Preview {
-	LogoImage(network: TVSerie.preview.details.networks[0])
+	LogoImage(network: TVSerieDTO.preview.details.networks[0])
 }

@@ -5,13 +5,14 @@
 //  Created by Javier Rodríguez Gómez on 1/5/24.
 //
 
+import SwiftData
 import SwiftUI
 
 @Observable
 final class SeriesVM {
 	let logic = TVSerieLogic.shared
 	
-	var serie: TVSerie?
+	var selected: TVSerieDTO?
 	var showAlert = false
 	var errorMessage = ""
 	
@@ -21,7 +22,7 @@ final class SeriesVM {
 		do {
 			let download = try await logic.downloadSerie(id: id)
 			await MainActor.run {
-				serie = download
+				selected = download
 			}
 		} catch {
 			await MainActor.run {
@@ -44,6 +45,13 @@ final class SeriesVM {
 			}
 		}
 	}
+	
+	func setFavorite(serie: TVSerieDTO, context: ModelContext) {
+		do {
+			try logic.setFavorite(serie: serie, context: context)
+		} catch {
+			errorMessage = error.localizedDescription
+			showAlert.toggle()
+		}
+	}
 }
-
-let series = [615, 1433, 2710, 1405, 456]

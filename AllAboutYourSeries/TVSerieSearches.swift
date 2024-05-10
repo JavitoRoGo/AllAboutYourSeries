@@ -14,11 +14,13 @@ struct GlobalSearch: Codable {
 struct TVSerieSearches: Codable, Identifiable {
 	let id: Int
 	let name: String
+	let backdropPath: String?
 	let posterPath: String?
 	
 	enum CodingKeys: String, CodingKey {
 		case id
 		case name
+		case backdropPath = "backdrop_path"
 		case posterPath = "poster_path"
 	}
 }

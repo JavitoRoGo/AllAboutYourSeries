@@ -2,71 +2,71 @@
 //  TVDetail.swift
 //  AllAboutYourSeries
 //
-//  Created by Javier Rodríguez Gómez on 30/4/24.
+//  Created by Javier Rodríguez Gómez on 5/5/24.
 //
 
 import Foundation
+import SwiftData
 
-// MARK: - TVDetail
-struct TVDetail: Codable {
+@Model
+final class TVDetail {
 	let id: Int
 	let backdropPath: String?
-	let createdBy: [CreatedBy]
 	let firstAirDate: String
 	let inProduction: Bool
 	let lastAirDate: String
-	let lastEpisodeToAir: TVEpisode
 	let name: String
 	let networks: [Network]
-	let numberOfEpisodes, numberOfSeasons: Int
+	let numberOfEpisodes: Int
+	let numberOfSeasons: Int
 	let overview: String
 	let posterPath: String?
 	let productionCompanies: [Network]
 	let tagline: String
 	let voteAverage: Double
+	var serie: TVSerie?
 	
-	enum CodingKeys: String, CodingKey {
-		case backdropPath = "backdrop_path"
-		case createdBy = "created_by"
-		case firstAirDate = "first_air_date"
-		case id
-		case inProduction = "in_production"
-		case lastAirDate = "last_air_date"
-		case lastEpisodeToAir = "last_episode_to_air"
-		case name
-		case networks
-		case numberOfEpisodes = "number_of_episodes"
-		case numberOfSeasons = "number_of_seasons"
-		case overview
-		case posterPath = "poster_path"
-		case productionCompanies = "production_companies"
-		case tagline
-		case voteAverage = "vote_average"
+	init(id: Int, backdropPath: String?, firstAirDate: String, inProduction: Bool, lastAirDate: String, name: String, networks: [Network], numberOfEpisodes: Int, numberOfSeasons: Int, overview: String, posterPath: String?, productionCompanies: [Network], tagline: String, voteAverage: Double) {
+		self.id = id
+		self.backdropPath = backdropPath
+		self.firstAirDate = firstAirDate
+		self.inProduction = inProduction
+		self.lastAirDate = lastAirDate
+		self.name = name
+		self.networks = networks
+		self.numberOfEpisodes = numberOfEpisodes
+		self.numberOfSeasons = numberOfSeasons
+		self.overview = overview
+		self.posterPath = posterPath
+		self.productionCompanies = productionCompanies
+		self.tagline = tagline
+		self.voteAverage = voteAverage
 	}
 }
 
-// MARK: - CreatedBy
-struct CreatedBy: Codable {
-	let id: Int
-	let name: String
-	let profilePath: String?
-	
-	enum CodingKeys: String, CodingKey {
-		case id
-		case name
-		case profilePath = "profile_path"
+extension TVDetail {
+	var toDTO: TVDetailDTO {
+		TVDetailDTO(id: id, backdropPath: backdropPath, firstAirDate: firstAirDate, inProduction: inProduction, lastAirDate: lastAirDate, name: name, networks: networks.map(\.toDTO), numberOfEpisodes: numberOfEpisodes, numberOfSeasons: numberOfSeasons, overview: overview, posterPath: posterPath, productionCompanies: productionCompanies.map(\.toDTO), tagline: tagline, voteAverage: voteAverage)
 	}
 }
 
-// MARK: - Network
-struct Network: Codable, Identifiable {
+
+@Model
+final class Network {
 	let id: Int
 	let logoPath: String?
 	let name: String
+	var detail: TVDetail?
 	
-	enum CodingKeys: String, CodingKey {
-		case id
-		case logoPath = "logo_path"
-		case name
+	init(id: Int, logoPath: String?, name: String) {
+		self.id = id
+		self.logoPath = logoPath
+		self.name = name
+	}
+}
+
+extension Network {
+	var toDTO: NetworkDTO {
+		NetworkDTO(id: id, logoPath: logoPath, name: name)
 	}
 }

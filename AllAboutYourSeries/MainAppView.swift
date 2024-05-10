@@ -18,7 +18,7 @@ struct MainAppView: View {
 		
 		NavigationStack {
 			ZStack {
-				if let serie = vm.serie {
+				if let serie = vm.selected {
 					SerieDetailView(serie: serie)
 				}
 				VStack {
@@ -48,14 +48,6 @@ struct MainAppView: View {
 										Spacer()
 									}
 									.background(.background)
-									.swipeActions {
-										Button {
-											// guardar o borrar de los favoritos
-										} label: {
-											Image(systemName: "star.fill")
-										}
-										.tint(.yellow)
-									}
 									.onTapGesture {
 										Task { await vm.getSerie(id: result.id) }
 									}
@@ -70,29 +62,15 @@ struct MainAppView: View {
 									.font(.subheadline)
 								}
 							} footer: {
-								Text("Tap to see all the details, and swipe to save as favorite.")
+								Text("Tap to see all the details, where you can set is as favorite.")
 							}
 						}
+						ScrollCardView()
 					}
-					
-					// mostrar favoritos como grid de cards
-					
-//					HStack {
-//						ForEach(series, id: \.self) { index in
-//							Button {
-//								Task {
-//									await vm.getSerie(id: index)
-//								}
-//							} label: {
-//								Text("Ir a \(index)")
-//							}
-//							.buttonStyle(.bordered)
-//						}
-//					}
 				}
-				.opacity(vm.serie == nil ? 1.0 : 0.0)
+				.opacity(vm.selected == nil ? 1.0 : 0.0)
 			}
-			.navigationTitle(vm.serie == nil ? "InfoSeries" : "")
+			.navigationTitle(vm.selected == nil ? "InfoSeries" : "")
 			.alert("Ups!", isPresented: $bvm.showAlert) { } message: {
 				Text(vm.errorMessage)
 			}

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CastCrewComponent: View {
-	let serie: TVSerie
+	let serie: TVSerieDTO
 	
     var body: some View {
 		VStack(alignment: .leading, spacing: 0.0) {
