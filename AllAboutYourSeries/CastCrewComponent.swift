@@ -17,7 +17,7 @@ struct CastCrewComponent: View {
 				.padding(.leading)
 			ScrollView(.horizontal) {
 				LazyHStack {
-					ForEach(serie.cast) { cast in
+					ForEach(serie.castSorted) { cast in
 						ProfileCard(cast: cast)
 					}
 				}

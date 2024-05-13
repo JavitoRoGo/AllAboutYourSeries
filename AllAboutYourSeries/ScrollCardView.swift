@@ -12,8 +12,6 @@ struct ScrollCardView: View {
 	private let colummns = [GridItem(.adaptive(minimum: 85))]
 	@Environment(SeriesVM.self) private var vm
 	@Query(sort: [SortDescriptor(\TVSerie.details.name)]) private var favorites: [TVSerie]
-	@Query private var seasons: [TVSeason]
-	@Query private var episodes: [TVEpisode]
 	
     var body: some View {
 		if !favorites.isEmpty {
@@ -23,12 +21,7 @@ struct ScrollCardView: View {
 						Button {
 							vm.selected = serie.toDTO
 						} label: {
-							VStack {
-								FullPoster(serie: serie.toDTO)
-								Text(serie.seasons.count.formatted())
-								Text(seasons.count.formatted())
-								Text(episodes.count.formatted())
-							}
+							FullPoster(serie: serie.toDTO)
 						}
 						.clipShape(.rect(cornerRadius: 12))
 						.frame(width: 80)

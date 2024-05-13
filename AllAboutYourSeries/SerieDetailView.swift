@@ -61,7 +61,7 @@ struct SerieDetailView: View {
 			isFavorite = (favorites.first(where: { $0.id == serie.id }) != nil)
 		}
 		.sheet(isPresented: $showSeasons) {
-			SeasonDetailView(serie: serie)
+			SeasonsListView(serie: serie)
 		}
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - TVSeasonDTO
-struct TVSeasonDTO: Codable, Identifiable {
+struct TVSeasonDTO: Codable, Identifiable, Hashable {
 	let id = UUID()
 	let dbid: Int?
 	let airDate: String

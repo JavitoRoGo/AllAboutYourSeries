@@ -2,29 +2,37 @@
 //  SeasonDetailView.swift
 //  AllAboutYourSeries
 //
-//  Created by Javier Rodríguez Gómez on 9/5/24.
+//  Created by Javier Rodríguez Gómez on 13/5/24.
 //
 
 import SwiftUI
 
 struct SeasonDetailView: View {
-	let serie: TVSerieDTO
+	let season: TVSeasonDTO
 	
     var body: some View {
-		ScrollView {
-			LazyVStack {
-				ForEach(serie.seasons) { season in
-					Text(season.seasonNumber.formatted())
+		VStack {
+			Text(season.name)
+				.font(.largeTitle)
+			Text(season.airDate)
+				.font(.headline)
+			Text(season.overview.isEmpty ? "No overview available" : season.overview)
+				.padding(.horizontal)
+			Divider()
+			List {
+				ForEach(season.episodes) { episode in
+					NavigationLink(value: episode) {
+						Text(episode.name)
+					}
 				}
 			}
 		}
-		.safeAreaPadding()
-		.onAppear {
-			print(serie.seasons.count)
+		.navigationDestination(for: TVEpisodeDTO.self) { episode in
+			EpisodeDetailView(episode: episode)
 		}
     }
 }
 
 #Preview {
-	SeasonDetailView(serie: .preview)
+	SeasonDetailView(season: TVSerieDTO.preview.seasons[0])
 }

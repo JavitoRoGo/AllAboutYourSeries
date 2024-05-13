@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainAppView: View {
 	@Environment(SeriesVM.self) private var vm
-	@State private var search = ""
+	@State private var search = "Futurama"
 	@State private var showResults = false
 	@State private var allSearch: [String] = []
 	
