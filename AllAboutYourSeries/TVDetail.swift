@@ -16,12 +16,12 @@ final class TVDetail {
 	let inProduction: Bool
 	let lastAirDate: String
 	let name: String
-	let networks: [Network]
+	@Relationship(deleteRule: .cascade) let networks: [Network]
 	let numberOfEpisodes: Int
 	let numberOfSeasons: Int
 	let overview: String
 	let posterPath: String?
-	let productionCompanies: [Network]
+	@Relationship(deleteRule: .cascade) let productionCompanies: [Network]
 	let tagline: String
 	let voteAverage: Double
 	var serie: TVSerie?

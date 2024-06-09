@@ -11,10 +11,10 @@ import SwiftData
 @Model
 final class TVSerie {
 	@Attribute(.unique) let id: Int
-	var details: TVDetail
-	var cast: [CastCrew]
-	var crew: [CastCrew]
-	var seasons: [TVSeason]
+	@Relationship(deleteRule: .cascade) var details: TVDetail
+	@Relationship(deleteRule: .cascade) var cast: [CastCrew]
+	@Relationship(deleteRule: .cascade) var crew: [CastCrew]
+	@Relationship(deleteRule: .cascade, inverse: \TVSeason.serie) var seasons: [TVSeason]
 	
 	init(id: Int, details: TVDetail, cast: [CastCrew], crew: [CastCrew], seasons: [TVSeason]) {
 		self.id = id
