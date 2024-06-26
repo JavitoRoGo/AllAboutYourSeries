@@ -19,7 +19,7 @@ final class TVEpisode {
 	let seasonNumber: Int
 	let stillPath: String?
 	let voteAverage: Double
-	var season: TVSeason?
+	var tvseason: TVSeason?
 	
 	init(id: UUID = UUID(), airDate: String, episodeNumber: Int, name: String, overview: String, runtime: Int?, seasonNumber: Int, stillPath: String?, voteAverage: Double) {
 		self.id = id

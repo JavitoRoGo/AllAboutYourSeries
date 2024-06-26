@@ -20,7 +20,7 @@ struct SeasonDetailView: View {
 				.padding(.horizontal)
 			Divider()
 			List {
-				ForEach(season.episodes) { episode in
+				ForEach(season.episodesSorted) { episode in
 					NavigationLink(value: episode) {
 						Text(episode.name)
 					}

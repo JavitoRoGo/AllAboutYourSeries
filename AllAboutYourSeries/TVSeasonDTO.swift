@@ -32,4 +32,10 @@ extension TVSeasonDTO {
 	var toTVSeason: TVSeason {
 		TVSeason(id: id, airDate: airDate, episodes: episodes.map(\.toTVEpisode), name: name, overview: overview, posterPath: posterPath, seasonNumber: seasonNumber, voteAverage: voteAverage)
 	}
+	
+	var episodesSorted: [TVEpisodeDTO] {
+		episodes.sorted {
+			$0.episodeNumber < $1.episodeNumber
+		}
+	}
 }

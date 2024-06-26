@@ -7,6 +7,7 @@
 
 import Foundation
 import JSONLibrary
+import OSLog
 
 protocol TVDataDownloader {
 	func getDetails(id: Int) async throws -> TVDetailDTO
@@ -20,6 +21,7 @@ protocol TVDataDownloader {
 struct TVDownloader: TVDataDownloader, NetworkInteractor {
 	static let shared = TVDownloader()
 	private let appConfig = AppConfig.shared
+	private let logger = Logger.tvDataInteractor
 	
 	private init() {}
 	
@@ -66,6 +68,7 @@ struct TVDownloader: TVDataDownloader, NetworkInteractor {
 		async let creditsRequest = getCredits(id: id)
 		async let seasonsRequest = getSeasons(id: id, numberOfSeasons: details.numberOfSeasons)
 		let (castcrew, seasons) = try await (creditsRequest, seasonsRequest)
+		logger.info("Seasons downloaded: \(seasons.count)")
 		return TVSerieDTO(
 			id: id,
 			details: details,

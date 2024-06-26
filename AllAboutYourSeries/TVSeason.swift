@@ -12,7 +12,7 @@ import SwiftData
 final class TVSeason {
 	@Attribute(.unique) let id: UUID
 	let airDate: String
-	@Relationship(deleteRule: .cascade, inverse: \TVEpisode.season) let episodes: [TVEpisode]
+	@Relationship(deleteRule: .cascade) var episodes: [TVEpisode]
 	let name: String
 	let overview: String
 	let posterPath: String?

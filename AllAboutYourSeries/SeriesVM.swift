@@ -7,10 +7,12 @@
 
 import SwiftData
 import SwiftUI
+import OSLog
 
 @Observable
 final class SeriesVM {
 	let logic = TVSerieLogic.shared
+	let logger = Logger.seriesVM
 	
 	var selected: TVSerieDTO?
 	var showAlert = false
@@ -21,14 +23,10 @@ final class SeriesVM {
 	func getSerie(id: Int) async {
 		do {
 			let download = try await logic.downloadSerie(id: id)
-			await MainActor.run {
-				selected = download
-			}
+			selected = download
 		} catch {
-			await MainActor.run {
-				errorMessage = error.localizedDescription
-				showAlert.toggle()
-			}
+			errorMessage = error.localizedDescription
+			showAlert.toggle()
 		}
 	}
 	
@@ -50,6 +48,7 @@ final class SeriesVM {
 		do {
 			try logic.setFavorite(serie: serie, context: context)
 		} catch {
+			logger.error("Error setting as favorite")
 			errorMessage = error.localizedDescription
 			showAlert.toggle()
 		}

@@ -7,18 +7,22 @@
 
 import SwiftData
 import SwiftUI
+import OSLog
 
 @Observable
 final class TVSerieLogic {
 	static let shared = TVSerieLogic()
 	let interactor: TVDataDownloader
+	private let logger = Logger.serieLogic
 	
 	init(interactor: TVDataDownloader = TVDownloader.shared) {
 		self.interactor = interactor
 	}
 	
 	func downloadSerie(id: Int) async throws -> TVSerieDTO {
-		try await interactor.getTVSerie(id: id)
+		let serie = try await interactor.getTVSerie(id: id)
+		logger.info("Downloaded seasons: \(serie.seasons.count)")
+		return serie
 	}
 	
 	func searchSeries(text: String) async throws -> [TVSerieSearches] {
@@ -31,10 +35,24 @@ final class TVSerieLogic {
 			#Predicate { $0.id == id }
 		)
 		if let fetch = try context.fetch(query).first {
+			logger.info("Found serie with \(fetch.seasons.count) seasons to delete from favorites")
 			context.delete(fetch)
 		} else {
-			let new = TVSerie(id: id, details: serie.details.toTVDetail, cast: serie.cast.map(\.toCastCrew), crew: serie.crew.map(\.toCastCrew), seasons: serie.seasons.map(\.toTVSeason))
+			logger.info("\(serie.seasons.count) seasons in serie to set as favorite")
+			let seasons = serie.seasons.map { $0.toTVSeason }
+			logger.info("\(seasons.count) seasons mapped to TVSeason")
+			let new = TVSerie(id: id, details: serie.details.toTVDetail, cast: serie.cast.map(\.toCastCrew), crew: serie.crew.map(\.toCastCrew), seasons: seasons)
 			context.insert(new)
+			new.seasons.forEach { season in
+				season.episodes.forEach { episode in
+					episode.tvseason = season
+				}
+				season.serie = new
+			}
+			
+			if let seasonsFetch = try context.fetch(query).first {
+				logger.info("\(seasonsFetch.seasons.count) seasons in new serie set as favorite")
+			}
 		}
 	}
 }

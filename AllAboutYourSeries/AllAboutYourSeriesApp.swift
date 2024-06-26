@@ -7,17 +7,19 @@
 
 import SwiftData
 import SwiftUI
+import OSLog
 
 @main
 struct AllAboutYourSeriesApp: App {
 	@State private var vm = SeriesVM()
+	let logger = Logger.fileLocation
 	
     var body: some Scene {
         WindowGroup {
             MainAppView()
 				.environment(vm)
 				.onAppear {
-					print(URL.cachesDirectory.absoluteString)
+					logger.info("\(URL.documentsDirectory.path())")
 				}
         }
 		.modelContainer(for: TVSerie.self)
